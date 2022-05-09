@@ -1,0 +1,361 @@
+import React from "react"
+import {
+  useGetTodaysGamesQuery,
+  useGetTodaysLaLigaGamesQuery,
+  useGetTodaysNflGamesQuery,
+  useGetTodaysMmaGamesQuery,
+  useGetTodaysEplGamesQuery,
+} from "../services/TodaysGamesApi"
+
+const TodaysGamesScreen = () => {
+  const { data, isFetching } = useGetTodaysGamesQuery()
+  const { data: nflGames } = useGetTodaysNflGamesQuery()
+  const { data: mmaGames } = useGetTodaysMmaGamesQuery()
+  const { data: laLigaGames } = useGetTodaysLaLigaGamesQuery()
+  const { data: eplGames } = useGetTodaysEplGamesQuery()
+
+  return (
+    <div className="bg-white">
+      <div class="container mx-auto min-h-screen">
+        {isFetching && (
+          <div className="my-5 text-center">
+            <svg
+              role="status"
+              class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
+              viewBox="0 0 100 101"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                fill="currentColor"
+              />
+              <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentFill"
+              />
+            </svg>
+          </div>
+        )}
+
+        <div className="my-10">
+          <h1 className="text-center font-bold text-6xl	">
+            {eplGames?.[0].sport_title}
+          </h1>
+        </div>
+        <table class="text-left w-2/4 mx-auto">
+          <thead class="bg-black flex mb-4 text-white w-full">
+            <tr class="flex w-full mb-4 ">
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Home Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Result</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Away Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Starting Time</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class="bg-grey-light flex flex-col items-center justify-between  w-full"
+            style={{ minHeight: "50vh" }}
+          >
+            {eplGames?.map((eplGame) => {
+              return (
+                <tr
+                  key={eplGame.id}
+                  class="flex w-full mb-4 border-y-2 rounded 	 border-gray-400"
+                >
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold text-black">
+                      {eplGame.home_team}
+                    </p>
+                  </td>
+                  {eplGame.completed ? (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">{eplGame.score}</p>
+                    </td>
+                  ) : (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">0 - 0</p>
+                    </td>
+                  )}
+                  <td class="p-4 w-1/4 ">
+                    <p className="font-semibold ">{eplGame.away_team}</p>
+                  </td>
+
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold ">
+                      Date:{" "}
+                      {eplGame.commence_time.split("T")[0].substring(0, 10)}{" "}
+                      Time:{" "}
+                      {eplGame.commence_time.split("T")[1].substring(0, 5)}
+                    </p>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+
+        <div className="my-10">
+          <h1 className="text-center font-bold text-6xl	">
+            {laLigaGames?.[0].sport_title}
+          </h1>
+        </div>
+        <table class="text-left w-2/4 mx-auto">
+          <thead class="bg-black flex mb-4 text-white w-full">
+            <tr class="flex w-full mb-4 ">
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Home Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Result</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Away Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Starting Time</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class="bg-grey-light flex flex-col items-center justify-between  w-full"
+            style={{ minHeight: "50vh" }}
+          >
+            {laLigaGames?.map((laLigaGame) => {
+              return (
+                <tr
+                  key={laLigaGame.id}
+                  class="flex w-full mb-4 border-y-2 rounded 	 border-gray-400"
+                >
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold text-black">
+                      {laLigaGame.home_team}
+                    </p>
+                  </td>
+                  {laLigaGame.completed ? (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">{laLigaGame.score}</p>
+                    </td>
+                  ) : (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">0 - 0</p>
+                    </td>
+                  )}
+                  <td class="p-4 w-1/4 ">
+                    <p className="font-semibold ">{laLigaGame.away_team}</p>
+                  </td>
+
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold ">
+                      Date:{" "}
+                      {laLigaGame.commence_time.split("T")[0].substring(0, 10)}{" "}
+                      Time:{" "}
+                      {laLigaGame.commence_time.split("T")[1].substring(0, 5)}
+                    </p>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+
+        <div className="my-10">
+          <h1 className="text-center font-bold text-6xl	">
+            {data?.[0].sport_title}
+          </h1>
+        </div>
+        <table class="text-left w-2/4 mx-auto">
+          <thead class="bg-black flex mb-4 text-white w-full">
+            <tr class="flex w-full mb-4 ">
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Home Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Result</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Away Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Starting Time</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class="bg-grey-light flex flex-col items-center justify-between  w-full"
+            style={{ minHeight: "50vh" }}
+          >
+            {data?.map((result) => {
+              return (
+                <tr
+                  key={result.id}
+                  class="flex w-full mb-4 border-y-2 rounded 	 border-gray-400"
+                >
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold text-black">
+                      {result.home_team}
+                    </p>
+                  </td>
+                  {result.completed ? (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">{result.score}</p>
+                    </td>
+                  ) : (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">0 - 0</p>
+                    </td>
+                  )}
+                  <td class="p-4 w-1/4 ">
+                    <p className="font-semibold ">{result.away_team}</p>
+                  </td>
+
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold ">
+                      Date:{" "}
+                      {result.commence_time.split("T")[0].substring(0, 10)}{" "}
+                      Time: {result.commence_time.split("T")[1].substring(0, 5)}
+                    </p>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+
+        <div className="my-10">
+          <h1 className="text-center font-bold text-6xl	">
+            {nflGames?.[0].sport_title}
+          </h1>
+        </div>
+
+        <table class="text-left w-2/4 mx-auto">
+          <thead class="bg-black flex mb-4 text-white w-full">
+            <tr class="flex w-full mb-4 ">
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Home Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Result</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Away Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Starting Time</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class="bg-grey-light flex flex-col items-center justify-between  w-full"
+            style={{ minHeight: "50vh;" }}
+          >
+            {nflGames?.map((game) => {
+              return (
+                <tr
+                  key={game.id}
+                  class="flex w-full mb-4 border-y-2 rounded	 border-gray-400"
+                >
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold text-black">{game.home_team}</p>
+                  </td>
+                  {game.completed ? (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">{game.score}</p>
+                    </td>
+                  ) : (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">0 - 0</p>
+                    </td>
+                  )}
+                  <td class="p-4 w-1/4 ">
+                    <p className="font-semibold ">{game.away_team}</p>
+                  </td>
+
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold ">
+                      Date: {game.commence_time.split("T")[0].substring(0, 10)}{" "}
+                      Time: {game.commence_time.split("T")[1].substring(0, 5)}
+                    </p>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+
+        <div className="my-10">
+          <h1 className="text-center font-bold text-6xl	">
+            {mmaGames?.[0].sport_title}
+          </h1>
+        </div>
+        <table class="text-left w-2/4 mx-auto">
+          <thead class="bg-black flex mb-4 text-white w-full">
+            <tr class="flex w-full mb-4 ">
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Home Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Result</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Away Team</p>
+              </th>
+              <th class="p-4 w-1/4">
+                <p className="text-white font-bold text-lg">Starting Time</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class="bg-grey-light flex flex-col items-center justify-between  w-full"
+            style={{ minHeight: "50vh;" }}
+          >
+            {mmaGames?.map((mmaGame) => {
+              return (
+                <tr
+                  key={mmaGame.id}
+                  class="flex w-full mb-4 border-y-2 rounded	 border-gray-400"
+                >
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold text-black">
+                      {mmaGame.home_team}
+                    </p>
+                  </td>
+                  {mmaGame.completed ? (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">{mmaGame.score}</p>
+                    </td>
+                  ) : (
+                    <td class="p-4 w-1/4">
+                      <p className="font-semibold ">0 - 0</p>
+                    </td>
+                  )}
+                  <td class="p-4 w-1/4 ">
+                    <p className="font-semibold ">{mmaGame.away_team}</p>
+                  </td>
+
+                  <td class="p-4 w-1/4">
+                    <p className="font-semibold ">
+                      Date:{" "}
+                      {mmaGame.commence_time.split("T")[0].substring(0, 10)}{" "}
+                      Time:{" "}
+                      {mmaGame.commence_time.split("T")[1].substring(0, 5)}
+                    </p>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+export default TodaysGamesScreen
